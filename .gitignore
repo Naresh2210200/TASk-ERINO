@@ -2,7 +2,10 @@ node_modules
 dist
 .DS_Store
 *.log
-*.lock
+# Allow package-lock.json for Netlify builds
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
 /.vite
 /.idea
 /.vscode
