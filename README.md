@@ -1,7 +1,7 @@
 ﻿# TaskGlitch
 
 A modern task management application built with React, TypeScript, and Material-UI. Track tasks with revenue, time tracking, priority management, and comprehensive analytics.
-
+url : https://naresh-kumar-taskglitch.netlify.app/
 ## Features
 
 - **Task Management**: Create, update, and delete tasks with title, revenue, time tracking, priority, and status
