@@ -103,7 +103,7 @@ export function useTasks(): UseTasksState {
   const metrics = useMemo<Metrics>(() => {
     if (tasks.length === 0) return INITIAL_METRICS;
     const totalRevenue = computeTotalRevenue(tasks);
-    const totalTimeTaken = tasks.reduce((s, t) => s + t.timeTaken, 0);
+    const totalTimeTaken = tasks.reduce((s: number, t: Task) => s + t.timeTaken, 0);
     const timeEfficiencyPct = computeTimeEfficiency(tasks);
     const revenuePerHour = computeRevenuePerHour(tasks);
     const averageROI = computeAverageROI(tasks);
@@ -112,7 +112,7 @@ export function useTasks(): UseTasksState {
   }, [tasks]);
 
   const addTask = useCallback((task: Omit<Task, 'id'> & { id?: string }) => {
-    setTasks(prev => {
+    setTasks((prev: Task[]) => {
       const id = task.id ?? crypto.randomUUID();
       const timeTaken = task.timeTaken <= 0 ? 1 : task.timeTaken; // auto-correct
       const createdAt = new Date().toISOString();
@@ -123,8 +123,8 @@ export function useTasks(): UseTasksState {
   }, []);
 
   const updateTask = useCallback((id: string, patch: Partial<Task>) => {
-    setTasks(prev => {
-      const next = prev.map(t => {
+    setTasks((prev: Task[]) => {
+      const next = prev.map((t: Task) => {
         if (t.id !== id) return t;
         const merged = { ...t, ...patch } as Task;
         if (t.status !== 'Done' && merged.status === 'Done' && !merged.completedAt) {
@@ -133,21 +133,21 @@ export function useTasks(): UseTasksState {
         return merged;
       });
       // Ensure timeTaken remains > 0
-      return next.map(t => (t.id === id && (patch.timeTaken ?? t.timeTaken) <= 0 ? { ...t, timeTaken: 1 } : t));
+      return next.map((t: Task) => (t.id === id && (patch.timeTaken ?? t.timeTaken) <= 0 ? { ...t, timeTaken: 1 } : t));
     });
   }, []);
 
   const deleteTask = useCallback((id: string) => {
-    setTasks(prev => {
-      const target = prev.find(t => t.id === id) || null;
+    setTasks((prev: Task[]) => {
+      const target = prev.find((t: Task) => t.id === id) || null;
       setLastDeleted(target);
-      return prev.filter(t => t.id !== id);
+      return prev.filter((t: Task) => t.id !== id);
     });
   }, []);
 
   const undoDelete = useCallback(() => {
     if (!lastDeleted) return;
-    setTasks(prev => [...prev, lastDeleted]);
+    setTasks((prev: Task[]) => [...prev, lastDeleted]);
     setLastDeleted(null);
   }, [lastDeleted]);
 
